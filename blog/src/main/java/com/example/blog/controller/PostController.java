@@ -5,6 +5,7 @@ import com.example.blog.dto.PostRequestDto;
 import com.example.blog.dto.PostResponseDto;
 import com.example.blog.jwt.JwtUtil;
 import com.example.blog.service.PostService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,17 +32,17 @@ public class PostController {
 
     // @CookieValue 가 아니라 헤더로 받아올 것
     @PostMapping("/posts")
-    public PostResponseDto createPost(@CookieValue(JwtUtil.AUTHORIZATION_HEADER) String tokenValue, @RequestBody PostRequestDto requestDto) {
+    public PostResponseDto createPost(@RequestHeader(JwtUtil.AUTHORIZATION_HEADER) String tokenValue, @RequestBody PostRequestDto requestDto) {
         return postService.createPost(tokenValue, requestDto);
     }
 
     @PutMapping("/posts/{id}")
-    public PostResponseDto updatePost(@CookieValue(JwtUtil.AUTHORIZATION_HEADER) String tokenValue, @PathVariable Long id, @RequestBody PostRequestDto requestDto) {
+    public PostResponseDto updatePost(@RequestHeader(JwtUtil.AUTHORIZATION_HEADER) String tokenValue, @PathVariable Long id, @RequestBody PostRequestDto requestDto) {
         return postService.updatePost(tokenValue, id, requestDto);
     }
 
     @DeleteMapping("/posts/{id}")
-    public MessageResponseDto deletePost(@CookieValue(JwtUtil.AUTHORIZATION_HEADER) String tokenValue, @PathVariable Long id) {
+    public ResponseEntity<MessageResponseDto> deletePost(@RequestHeader(JwtUtil.AUTHORIZATION_HEADER) String tokenValue, @PathVariable Long id) {
         return postService.deletePost(tokenValue, id);
     }
 }

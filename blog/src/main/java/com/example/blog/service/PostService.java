@@ -7,6 +7,8 @@ import com.example.blog.entity.Post;
 import com.example.blog.jwt.JwtUtil;
 import com.example.blog.repository.PostRepository;
 import io.jsonwebtoken.Claims;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -86,7 +88,7 @@ public class PostService {
         return new PostResponseDto(post);
     }
 
-    public MessageResponseDto deletePost(String tokenValue, Long id) {
+    public ResponseEntity<MessageResponseDto> deletePost(String tokenValue, Long id) {
         // 해당 post가 DB에 존재하는지 확인
         Post post = findPost(id);
 
@@ -109,7 +111,7 @@ public class PostService {
 
         postRepository.delete(post);
 
-        return new MessageResponseDto("게시글 삭제 성공", "200");
+        return new ResponseEntity<MessageResponseDto>(new MessageResponseDto("게시글 삭제 성공", "200"), HttpStatus.OK);
     }
 
     private Post findPost(Long id) {
